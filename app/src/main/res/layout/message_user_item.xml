@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_user_profile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="@dimen/margin_small_size"
+        android:layout_marginRight="@dimen/margin_small_size"
+        android:elevation="6dp"
+        android:src="@drawable/profile_placeholder"
+        app:civ_border_color="@color/colorWhite"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/input_user_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/input_user_message"
+        tools:targetApi="lollipop" />
+
+    <com.github.library.bubbleview.BubbleTextView
+        android:id="@+id/input_user_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small_size"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:maxWidth="250dp"
+        android:padding="10dp"
+        android:text="@string/message"
+        android:textColor="@color/colorWhite"
+        android:textSize="15sp"
+        app:angle="8dp"
+        app:arrowCenter="true"
+        app:arrowHeight="8dp"
+        app:arrowLocation="right"
+        app:arrowPosition="14dp"
+        app:arrowWidth="10dp"
+        app:bubbleColor="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/tv_user_date"
+        app:layout_constraintEnd_toStartOf="@+id/img_user_profile"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="4dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_user_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_normal_size"
+        android:layout_marginBottom="6dp"
+        android:text="@string/request_data"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/input_user_message"
+        android:layout_marginRight="@dimen/margin_normal_size" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

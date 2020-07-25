@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "402564226707",
+    "firebase_url": "https://rumah-qur-an-cianjur.firebaseio.com",
+    "project_id": "rumah-qur-an-cianjur",
+    "storage_bucket": "rumah-qur-an-cianjur.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402564226707:android:8d221f61d56feb843ff766",
+        "android_client_info": {
+          "package_name": "com.wildan.rumahqurancianjur"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402564226707-7uhal10ov456co15riiv2ji5nrbnhe7v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wildan.rumahqurancianjur",
+            "certificate_hash": "8bd07f02ef3d551befa701ec8c9683e37c8038b0"
+          }
+        },
+        {
+          "client_id": "402564226707-8qh90mur8nlu7r2os0s5t07rpht1jch5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRXolFaO63YGbauf7k7KDbQeFTpT5QbUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "402564226707-8qh90mur8nlu7r2os0s5t07rpht1jch5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

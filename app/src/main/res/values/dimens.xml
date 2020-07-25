@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_very_big_size">24sp</dimen>
+    <dimen name="margin_big_size">16sp</dimen>
+    <dimen name="font_big_size">16sp</dimen>
+    <dimen name="font_very_big_size">24sp</dimen>
+    <dimen name="margin_normal_size">12sp</dimen>
+    <dimen name="margin_small_size">8dp</dimen>
+    <dimen name="btn_corner">6dp</dimen>
+    <dimen name="card_elevation">3dp</dimen>
+</resources>
