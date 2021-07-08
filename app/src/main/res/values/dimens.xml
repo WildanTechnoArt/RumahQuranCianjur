@@ -8,4 +8,5 @@
     <dimen name="margin_small_size">8dp</dimen>
     <dimen name="btn_corner">6dp</dimen>
     <dimen name="card_elevation">3dp</dimen>
+    <dimen name="card_radius_corner">6dp</dimen>
 </resources>

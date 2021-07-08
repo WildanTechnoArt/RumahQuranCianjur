@@ -30,8 +30,7 @@
                     android:layout_height="0dp"
                     android:elevation="6dp"
                     android:src="@drawable/profile_placeholder"
-                    app:civ_border_color="@color/colorWhite"
-                    app:civ_border_width="2dp"
+                    app:civ_border_width="1dp"
                     app:layout_constraintBottom_toTopOf="@+id/b_guideline_photo"
                     app:layout_constraintEnd_toStartOf="@+id/r_guideline_photo"
                     app:layout_constraintStart_toStartOf="@+id/l_guideline_photo"
@@ -71,15 +70,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:backgroundTint="@color/colorAccent"
-                    app:fabSize="mini"
-                    app:tint="#FFFFFF"
+                    app:fabSize="normal"
                     app:layout_constraintBottom_toBottomOf="@+id/img_profile"
                     app:layout_constraintEnd_toEndOf="@+id/img_profile"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="@+id/img_profile"
                     app:layout_constraintTop_toTopOf="@+id/img_profile"
                     app:layout_constraintVertical_bias="0.97"
-                    app:srcCompat="@drawable/ic_add_a_photo_white_24dp" />
+                    app:srcCompat="@drawable/ic_add_a_photo_white_24dp"
+                    app:tint="#FFFFFF" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_profile"

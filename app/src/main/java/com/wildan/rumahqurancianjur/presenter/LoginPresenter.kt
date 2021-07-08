@@ -47,7 +47,7 @@ class LoginPresenter(
                     SharedPrefManager.getInstance(context).saveUserStatus("Guru")
                     SharedPrefManager.getInstance(context).saveUserEmail(userEmail)
 
-                    view.onSuccess()
+                    view.onSuccess(userId)
                 } else {
                     view.hideProgressBar()
                     view.handleResponse((task.exception as FirebaseAuthException).errorCode)

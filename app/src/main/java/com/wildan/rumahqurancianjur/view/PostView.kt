@@ -1,7 +1,6 @@
 package com.wildan.rumahqurancianjur.view
 
 import android.net.Uri
-import com.theartofdev.edmodo.cropper.CropImage
 
 class PostView {
 
@@ -39,7 +38,7 @@ class PostView {
 
         fun requestPhoto(userId: String)
 
-        fun uploadFilePhoto(result: CropImage.ActivityResult)
+        fun uploadFilePhoto(result: Uri?)
         fun uploadFileDocument(result: Uri)
     }
 }

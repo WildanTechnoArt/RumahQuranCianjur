@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rumah Quran Cianjur</string>
+    <string name="app_name">Rumah Quran Cianjur (Guru)</string>
     <string name="sign_up_now">Daftar Sekarang</string>
     <string name="input_email">Masukan Email</string>
     <string name="password">Password</string>
@@ -74,4 +74,20 @@
     <string name="upload_file">Unggah File</string>
     <string name="no_data">-</string>
     <string name="view_assignment">Unduh File</string>
+    <string name="tv_username">Username</string>
+    <string name="tv_nomor_induk">Nomor induk</string>
+    <string name="loading_progress">Sedang Memuat.....</string>
+    <string name="btn_download_document">Unduh File</string>
+    <string name="tv_graded">Pengumpulan Tugas</string>
+    <string name="txt_no_graded">Belum ada yang mengirimkan tugas</string>
+    <string name="tv_submission">File Yang Akan Dikirim</string>
+    <string name="input_grade">Masukan Nilai 0 – 100</string>
+    <string name="grade_menu">BERI NILAI</string>
+    <string name="input_text">Tulis Sesuatu</string>
+    <string name="btn_attach">Melampirkan</string>
+    <string name="grade">Grade: 0/100</string>
+    <string name="assignment_status">Status</string>
+    <string name="nothing_member">Belum ada santri yang masuk</string>
+    <string name="submit">Kirim</string>
+    <string name="btn_view_assignment">Detail Tugas</string>
 </resources>

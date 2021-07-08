@@ -1,5 +1,6 @@
 package com.wildan.rumahqurancianjur.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -9,14 +10,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.razir.progressbutton.attachTextChangeAnimator
 import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
-import com.theartofdev.edmodo.cropper.CropImage
 import com.wildan.rumahqurancianjur.GlideApp
 import com.wildan.rumahqurancianjur.R
 import com.wildan.rumahqurancianjur.database.SharedPrefManager
+import com.wildan.rumahqurancianjur.model.RegisterResponse
 import com.wildan.rumahqurancianjur.presenter.RegisterPresenter
 import com.wildan.rumahqurancianjur.utils.Validation
 import com.wildan.rumahqurancianjur.view.RegisterView
@@ -43,13 +45,13 @@ class RegisterActivity : AppCompatActivity(), RegisterView.View {
         btn_register.setOnClickListener {
             getInputData()
 
-            val user = hashMapOf(
-                "username" to mUsername,
-                "email" to mEmail,
-                "phone" to mPhoneNumber,
-                "gender" to mGender,
-                "address" to mAddress
-            )
+            val user = RegisterResponse()
+            user.username = mUsername
+            user.email = mEmail
+            user.phone = mPhoneNumber
+            user.gender = mGender
+            user.address = mAddress
+            user.teacher = true
 
             if (Validation.validateFields(mUsername) || Validation.validateFields(mPassword) ||
                 Validation.validateFields(mGender) || Validation.validateFields(mAddress)
@@ -77,7 +79,13 @@ class RegisterActivity : AppCompatActivity(), RegisterView.View {
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        mPresenter.requestRegister(user, mEmail, mPassword, mReTypePassword, mImageUri)
+                        mPresenter.requestRegister(
+                            user,
+                            mEmail,
+                            mPassword,
+                            mReTypePassword,
+                            mImageUri
+                        )
                     }
                 }
             }
@@ -134,48 +142,34 @@ class RegisterActivity : AppCompatActivity(), RegisterView.View {
             PERMISSION_STORAGE -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    val galleryIntent = Intent()
-                    galleryIntent.type = "image/*"
-                    galleryIntent.action = Intent.ACTION_GET_CONTENT
-                    startActivityForResult(
-                        Intent.createChooser(galleryIntent, "SELECT IMAGE"),
-                        GALLERY_PICK
-                    )
+                    pickImage()
                 }
                 return
             }
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
-            val imageUri = data?.data
-            CropImage.activity(imageUri)
-                .setAspectRatio(1, 1)
-                .setMinCropWindowSize(200, 200)
-                .start(this)
-        }
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-            val result = CropImage.getActivityResult(data)
-
-            if (resultCode == RESULT_OK) {
-
-                mImageUri = result.uri
-                GlideApp.with(this)
-                    .load(mImageUri)
-                    .into(circle_image)
-
-            } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(
-                    this, "Crop Image Error",
-                    Toast.LENGTH_SHORT
-                ).show()
+    private fun pickImage() {
+        ImagePicker.with(this)
+            .compress(1024)
+            .maxResultSize(1024, 1024)
+            .start { resultCode, data ->
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        mImageUri = data?.data
+                        GlideApp.with(this)
+                            .load(mImageUri)
+                            .into(circle_image)
+                    }
+                    ImagePicker.RESULT_ERROR -> {
+                        Toast.makeText(
+                            this,
+                            ImagePicker.getError(data),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
-        }
     }
 
     private fun prepare() {
@@ -221,18 +215,11 @@ class RegisterActivity : AppCompatActivity(), RegisterView.View {
             }
 
         } else {
-            val galleryIntent = Intent()
-            galleryIntent.type = "image/*"
-            galleryIntent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(
-                Intent.createChooser(galleryIntent, "SELECT IMAGE"),
-                GALLERY_PICK
-            )
+            pickImage()
         }
     }
 
     companion object {
         const val PERMISSION_STORAGE = 1
-        const val GALLERY_PICK = 2
     }
 }

@@ -3,20 +3,20 @@ package com.wildan.rumahqurancianjur.activity
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.theartofdev.edmodo.cropper.CropImage
 import com.wildan.rumahqurancianjur.GlideApp
 import com.wildan.rumahqurancianjur.R
-import com.wildan.rumahqurancianjur.activity.RegisterActivity.Companion.GALLERY_PICK
 import com.wildan.rumahqurancianjur.activity.RegisterActivity.Companion.PERMISSION_STORAGE
 import com.wildan.rumahqurancianjur.database.SharedPrefManager
 import com.wildan.rumahqurancianjur.presenter.PostPresenter
@@ -27,8 +27,8 @@ import com.wildan.rumahqurancianjur.utils.UtilsConstant.POST_ID
 import com.wildan.rumahqurancianjur.utils.UtilsConstant.TOOLBAR_TITLE
 import com.wildan.rumahqurancianjur.view.PostView
 import kotlinx.android.synthetic.main.activity_create_post.*
+import kotlinx.android.synthetic.main.activity_create_post.img_profile
 import kotlinx.android.synthetic.main.toolbar_layout.*
-
 
 class CreatePostActivity : AppCompatActivity(), PostView.View {
 
@@ -137,21 +137,25 @@ class CreatePostActivity : AppCompatActivity(), PostView.View {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     if (isDocument == true) {
-                        val galleryIntent = Intent()
-                        galleryIntent.type = "file/*"
-                        galleryIntent.action = Intent.ACTION_GET_CONTENT
-                        startActivityForResult(
-                            Intent.createChooser(galleryIntent, "SELECT FILE"),
-                            FILE_PICK
+                        val mimeTypes = arrayOf(
+                            "application/pdf",
+                            "application/msword",
+                            "application/vnd.ms-powerpoint",
+                            "application/vnd.ms-excel",
+                            "text/plain"
                         )
+
+                        val intent = Intent(Intent.ACTION_GET_CONTENT)
+                        intent.addCategory(Intent.CATEGORY_OPENABLE)
+
+                        intent.type = if (mimeTypes.size == 1) mimeTypes[0] else "*/*"
+                        if (mimeTypes.isNotEmpty()) {
+                            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+                        }
+
+                        fileStartForResult.launch(intent)
                     } else {
-                        val galleryIntent = Intent()
-                        galleryIntent.type = "image/*"
-                        galleryIntent.action = Intent.ACTION_GET_CONTENT
-                        startActivityForResult(
-                            Intent.createChooser(galleryIntent, "SELECT IMAGE"),
-                            GALLERY_PICK
-                        )
+                        pickImage()
                     }
                 }
                 return
@@ -159,37 +163,32 @@ class CreatePostActivity : AppCompatActivity(), PostView.View {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == FILE_PICK && resultCode == Activity.RESULT_OK) {
-
-            val fileData = data?.data
-            fileData?.let { presenter.uploadFileDocument(it) }
-
-        } else if (requestCode == GALLERY_PICK && resultCode == Activity.RESULT_OK) {
-            val imageUri = data?.data
-            CropImage.activity(imageUri)
-                .setAspectRatio(1, 1)
-                .setMinCropWindowSize(200, 200)
-                .start(this)
-        }
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-            val result = CropImage.getActivityResult(data)
-
-            if (resultCode == Activity.RESULT_OK) {
-
-                presenter.uploadFilePhoto(result)
-
-            } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(
-                    this, "Crop Image Error",
-                    Toast.LENGTH_SHORT
-                ).show()
+    private val fileStartForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val fileData = result.data
+                fileData?.let { it.data?.let { it1 -> presenter.uploadFileDocument(it1) } }
             }
         }
+
+    private fun pickImage() {
+        ImagePicker.with(this)
+            .compress(1024)
+            .maxResultSize(1024, 1024)
+            .start { resultCode, data ->
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        presenter.uploadFilePhoto(data?.data)
+                    }
+                    ImagePicker.RESULT_ERROR -> {
+                        Toast.makeText(
+                            this,
+                            ImagePicker.getError(data),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
     }
 
     override fun showFileName(fileName: String) {
@@ -258,7 +257,6 @@ class CreatePostActivity : AppCompatActivity(), PostView.View {
             )
 
         } else {
-
             val mimeTypes = arrayOf(
                 "application/pdf",
                 "application/msword",
@@ -270,20 +268,12 @@ class CreatePostActivity : AppCompatActivity(), PostView.View {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.addCategory(Intent.CATEGORY_OPENABLE)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                intent.type = if (mimeTypes.size == 1) mimeTypes[0] else "*/*"
-                if (mimeTypes.isNotEmpty()) {
-                    intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-                }
-            } else {
-                var mimeTypesStr = ""
-                for (mimeType in mimeTypes) {
-                    mimeTypesStr += "$mimeType|"
-                }
-                intent.type = mimeTypesStr.substring(0, mimeTypesStr.length - 1)
+            intent.type = if (mimeTypes.size == 1) mimeTypes[0] else "*/*"
+            if (mimeTypes.isNotEmpty()) {
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
             }
 
-            startActivityForResult(Intent.createChooser(intent, "SELECT FILE"), FILE_PICK)
+            fileStartForResult.launch(intent)
         }
     }
 
@@ -304,17 +294,7 @@ class CreatePostActivity : AppCompatActivity(), PostView.View {
             )
 
         } else {
-            val galleryIntent = Intent()
-            galleryIntent.type = "image/*"
-            galleryIntent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(
-                Intent.createChooser(galleryIntent, "SELECT IMAGE"),
-                GALLERY_PICK
-            )
+            pickImage()
         }
-    }
-
-    companion object {
-        const val FILE_PICK = 3
     }
 }

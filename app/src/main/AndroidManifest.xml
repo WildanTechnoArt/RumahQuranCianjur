@@ -3,18 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.wildan.rumahqurancianjur">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE " />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_qumah_quran_round"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_qumah_quran_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity android:name=".activity.AssignmentViewActivity" />
+        <activity android:name=".activity.GradedActivity" />
+        <activity android:name=".activity.ViewAssignmentActivity" />
+        <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.ProfileUserActivity" />
         <activity android:name=".activity.CreatePostActivity" />
         <activity android:name=".activity.ClassRoomActivity" />
@@ -30,9 +37,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>

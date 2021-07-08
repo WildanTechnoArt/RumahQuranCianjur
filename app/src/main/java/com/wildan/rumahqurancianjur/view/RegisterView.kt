@@ -1,6 +1,7 @@
 package com.wildan.rumahqurancianjur.view
 
 import android.net.Uri
+import com.wildan.rumahqurancianjur.model.RegisterResponse
 
 class RegisterView {
 
@@ -13,7 +14,7 @@ class RegisterView {
 
     interface Presenter {
         fun requestRegister(
-            user: HashMap<String, String>,
+            user: RegisterResponse,
             email: String,
             password: String,
             retype: String,

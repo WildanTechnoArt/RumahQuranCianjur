@@ -7,7 +7,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.wildan.rumahqurancianjur.R
 import com.wildan.rumahqurancianjur.adapter.PagerAdapterTeacher
-import com.wildan.rumahqurancianjur.utils.UtilsConstant
 import com.wildan.rumahqurancianjur.utils.UtilsConstant.CLASS_ID
 import com.wildan.rumahqurancianjur.utils.UtilsConstant.LESSON_NAME
 import com.wildan.rumahqurancianjur.utils.UtilsConstant.TOOLBAR_TITLE
@@ -41,7 +40,7 @@ class ClassRoomActivity : AppCompatActivity() {
         TabLayoutMediator(
             tab_layout,
             view_pager,
-            TabLayoutMediator.TabConfigurationStrategy { tab, position ->
+            { tab, position ->
                 tab.text = tabMenu[position]
             }).attach()
 

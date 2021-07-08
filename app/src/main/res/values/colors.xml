@@ -6,4 +6,5 @@
     <color name="colorGray">#FFE4E4E4</color>
     <color name="line_view">#dfdfdf</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="card_view_color">#F1F1F1</color>
 </resources>

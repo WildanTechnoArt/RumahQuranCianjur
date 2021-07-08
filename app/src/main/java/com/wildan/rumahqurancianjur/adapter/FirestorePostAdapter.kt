@@ -1,13 +1,10 @@
 package com.wildan.rumahqurancianjur.adapter
 
 import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -15,9 +12,17 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.wildan.rumahqurancianjur.GlideApp
 import com.wildan.rumahqurancianjur.PostItemListener
 import com.wildan.rumahqurancianjur.R
+import com.wildan.rumahqurancianjur.activity.AssignmentViewActivity
+import com.wildan.rumahqurancianjur.activity.ViewAssignmentActivity
 import com.wildan.rumahqurancianjur.database.SharedPrefManager
 import com.wildan.rumahqurancianjur.model.PostData
+import com.wildan.rumahqurancianjur.utils.UtilsConstant.ASSIGNMENT_ID
+import com.wildan.rumahqurancianjur.utils.UtilsConstant.LINK_URL
+import com.wildan.rumahqurancianjur.utils.UtilsConstant.POST_CONTENT
+import com.wildan.rumahqurancianjur.utils.UtilsConstant.TEACHER_ID
+import com.wildan.rumahqurancianjur.utils.UtilsConstant.TEACHER_NIP
 import com.wildan.rumahqurancianjur.utils.UtilsConstant.TYPE_POST_ASSIGNMENT
+import com.wildan.rumahqurancianjur.utils.UtilsConstant.USERNAME
 import kotlinx.android.synthetic.main.assignment_item.view.*
 import kotlinx.android.synthetic.main.post_item.view.*
 
@@ -55,9 +60,9 @@ class FirestorePostAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, item: PostData) {
-
         val postId = snapshots.getSnapshot(position).id
         val context = holder.itemView.context
+        val isTeacher = SharedPrefManager.getInstance(context).getUserStatus.toString()
         val post = getItem(position)
         val userId = SharedPrefManager.getInstance(context).getUserId.toString()
 
@@ -67,6 +72,7 @@ class FirestorePostAdapter(
             val getPostContent = item.postContent.toString()
             val getTeacherNip = "NIP: ${item.nomorInduk.toString()}"
             val getLinkUrl = item.fileUrl.toString()
+            val getTeacherUserId = item.userId.toString()
 
             view.tv_assig_username.text = getUsername
             view.tv_assignment_desc.text = getPostContent
@@ -110,17 +116,24 @@ class FirestorePostAdapter(
             }
 
             view.btn_view_assignment.setOnClickListener {
-                try {
-                    val pdfUrl = Uri.parse(getLinkUrl)
-                    val intent = Intent(Intent.ACTION_VIEW, pdfUrl)
+                if (isTeacher == "Guru") {
+                    val intent = Intent(context, ViewAssignmentActivity::class.java)
+                    intent.putExtra(USERNAME, getUsername)
+                    intent.putExtra(POST_CONTENT, getPostContent)
+                    intent.putExtra(ASSIGNMENT_ID, postId)
+                    intent.putExtra(TEACHER_ID, getTeacherUserId)
+                    intent.putExtra(TEACHER_NIP, getTeacherNip)
+                    intent.putExtra(LINK_URL, getLinkUrl)
                     context.startActivity(intent)
-                } catch (ex: ActivityNotFoundException) {
-                    Toast.makeText(
-                        context,
-                        "Tidak ada aplikasi yang dapat menangani permintaan ini. Silakan instal browser web",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    ex.printStackTrace()
+                } else {
+                    val intent = Intent(context, AssignmentViewActivity::class.java)
+                    intent.putExtra(USERNAME, getUsername)
+                    intent.putExtra(POST_CONTENT, getPostContent)
+                    intent.putExtra(ASSIGNMENT_ID, postId)
+                    intent.putExtra(TEACHER_ID, getTeacherUserId)
+                    intent.putExtra(TEACHER_NIP, getTeacherNip)
+                    intent.putExtra(LINK_URL, getLinkUrl)
+                    context.startActivity(intent)
                 }
             }
 

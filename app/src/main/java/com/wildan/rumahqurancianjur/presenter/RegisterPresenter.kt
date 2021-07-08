@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.wildan.rumahqurancianjur.R
 import com.wildan.rumahqurancianjur.database.SharedPrefManager
+import com.wildan.rumahqurancianjur.model.RegisterResponse
 import com.wildan.rumahqurancianjur.view.RegisterView
 
 class RegisterPresenter(
@@ -20,10 +21,10 @@ class RegisterPresenter(
     private var mUserId: String? = null
     private var mEmail: String? = null
     private var mImageResult: Uri? = null
-    private var mUser = hashMapOf<String, String>()
+    private lateinit var mUser: RegisterResponse
 
     override fun requestRegister(
-        user: HashMap<String, String>,
+        user: RegisterResponse,
         email: String,
         password: String,
         retype: String,

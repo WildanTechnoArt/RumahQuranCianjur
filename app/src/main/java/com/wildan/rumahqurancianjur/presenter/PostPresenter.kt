@@ -6,7 +6,6 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.theartofdev.edmodo.cropper.CropImage
 import com.wildan.rumahqurancianjur.R
 import com.wildan.rumahqurancianjur.model.PostData
 import com.wildan.rumahqurancianjur.view.PostView
@@ -44,8 +43,8 @@ class PostPresenter(
         return result
     }
 
-    override fun uploadFilePhoto(result: CropImage.ActivityResult) {
-        resultUri = result.uri
+    override fun uploadFilePhoto(result: Uri?) {
+        resultUri = result
         view.showFileName(getFileName(resultUri))
     }
 

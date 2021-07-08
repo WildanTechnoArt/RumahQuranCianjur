@@ -12,5 +12,15 @@ object UtilsConstant {
     const val IS_EDITED = "is_edited"
     const val POST_ID = "post_id"
     const val GET_POST = "get_post"
+    const val STUDENT_ID = "student_id"
     const val TYPE_POST_ASSIGNMENT: Int = 0
+    const val POST_CONTENT = "post_content"
+    const val USERNAME = "username"
+    const val TEACHER_ID = "teacher_id"
+    const val TEACHER_NIP = "teacher_nip"
+    const val LINK_URL = "link_url"
+    const val ASSIGNMENT_ID = "assignment_id"
+    const val TEXT_ANSWER = "text_answer"
+    const val STUDENT_NAME = "student_name"
+    const val CLASS_NAME = "class_name"
 }

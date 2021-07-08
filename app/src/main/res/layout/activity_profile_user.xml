@@ -67,21 +67,6 @@
                     android:orientation="horizontal"
                     app:layout_constraintGuide_percent="0.28" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fab_add_photo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:backgroundTint="@color/colorAccent"
-                    app:fabSize="mini"
-                    app:layout_constraintBottom_toBottomOf="@+id/img_profile"
-                    app:layout_constraintEnd_toEndOf="@+id/img_profile"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/img_profile"
-                    app:layout_constraintTop_toTopOf="@+id/img_profile"
-                    app:layout_constraintVertical_bias="0.97"
-                    app:srcCompat="@drawable/ic_add_a_photo_white_24dp"
-                    app:tint="#FFFFFF" />
-
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_profile"
                     android:layout_width="0dp"
@@ -106,7 +91,6 @@
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
                             android:gravity="center|start"
                             android:text="@string/request_data"
                             android:textSize="15sp"
@@ -130,7 +114,6 @@
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
                             android:gravity="center|start"
                             android:text="@string/request_data"
                             android:textSize="15sp"
@@ -154,7 +137,6 @@
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
                             android:gravity="center|start"
                             android:text="@string/request_data"
                             android:textSize="15sp"
@@ -180,7 +162,6 @@
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
                             android:gravity="center|start"
                             android:text="@string/request_data"
                             android:textSize="15sp"

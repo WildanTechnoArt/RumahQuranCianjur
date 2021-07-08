@@ -11,6 +11,7 @@ import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.wildan.rumahqurancianjur.GlideApp
 import com.wildan.rumahqurancianjur.R
 import com.wildan.rumahqurancianjur.presenter.LoginPresenter
@@ -34,9 +35,16 @@ class LoginActivity : AppCompatActivity(), LoginView.View {
         setupListener()
     }
 
-    override fun onSuccess() {
-        startActivity(Intent(this, DashboardActivity::class.java))
-        finish()
+    override fun onSuccess(userId: String) {
+        if (checkUserStatus(userId) == true) {
+            startActivity(Intent(this, DashboardActivity::class.java))
+            finish()
+        } else {
+            Toast.makeText(
+                this, "Pengguna tidak terdaftar",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     override fun handleResponse(message: String) {
@@ -78,6 +86,26 @@ class LoginActivity : AppCompatActivity(), LoginView.View {
         presenter = LoginPresenter(this, this)
         bindProgressButton(btn_login)
         btn_login.attachTextChangeAnimator()
+    }
+
+    private fun checkUserStatus(userId: String): Boolean? {
+        var status: Boolean? = false
+        val db = FirebaseFirestore.getInstance()
+        db.collection("teacher")
+            .document(userId)
+            .get()
+            .addOnSuccessListener {
+                val getStatus = it.getBoolean("teacher")
+                status = getStatus == true
+            }.addOnFailureListener {
+                btn_login.hideProgress(R.string.btn_login)
+                Toast.makeText(
+                    this, it.localizedMessage?.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+        return status
     }
 
     private fun setupListener() {

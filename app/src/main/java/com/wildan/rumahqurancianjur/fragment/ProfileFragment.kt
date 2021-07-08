@@ -1,7 +1,6 @@
 package com.wildan.rumahqurancianjur.fragment
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -11,15 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.firestore.FirebaseFirestore
-import com.theartofdev.edmodo.cropper.CropImage
 import com.wildan.rumahqurancianjur.GlideApp
 import com.wildan.rumahqurancianjur.R
 import com.wildan.rumahqurancianjur.activity.EditProfileActivity
 import com.wildan.rumahqurancianjur.activity.LoginActivity
 import com.wildan.rumahqurancianjur.activity.RegisterActivity
-import com.wildan.rumahqurancianjur.activity.RegisterActivity.Companion.GALLERY_PICK
 import com.wildan.rumahqurancianjur.database.SharedPrefManager
 import com.wildan.rumahqurancianjur.presenter.ProfilePresenter
 import com.wildan.rumahqurancianjur.utils.UtilsConstant.NOMOR_INDUK
@@ -68,35 +66,29 @@ class ProfileFragment : Fragment(), ProfileFragmentView.View {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
-            val imageUri = data?.data
-            context?.let {
-                CropImage.activity(imageUri)
-                    .setAspectRatio(1, 1)
-                    .setMinCropWindowSize(200, 200)
-                    .start(it, this)
+    private fun pickImage() {
+        ImagePicker.with(this)
+            .compress(1024)
+            .maxResultSize(1024, 1024)
+            .start { resultCode, data ->
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        progress_bar?.visibility = View.VISIBLE
+                        presenter.uploadPhotoProfile(data?.data)
+                    }
+                    ImagePicker.RESULT_ERROR -> {
+                        progress_bar?.visibility = View.GONE
+                        Toast.makeText(
+                            context,
+                            ImagePicker.getError(data),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    else -> {
+                        progress_bar?.visibility = View.GONE
+                    }
+                }
             }
-        }
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-            val result = CropImage.getActivityResult(data)
-
-            if (resultCode == RESULT_OK) {
-                progress_bar?.visibility = View.VISIBLE
-                presenter.uploadPhotoProfile(result.uri)
-
-            } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                progress_bar?.visibility = View.GONE
-                Toast.makeText(
-                    context, "Crop Image Error",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -205,13 +197,7 @@ class ProfileFragment : Fragment(), ProfileFragmentView.View {
             }
 
         } else {
-            val galleryIntent = Intent()
-            galleryIntent.type = "image/*"
-            galleryIntent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(
-                Intent.createChooser(galleryIntent, "SELECT IMAGE"),
-                GALLERY_PICK
-            )
+            pickImage()
         }
     }
 
